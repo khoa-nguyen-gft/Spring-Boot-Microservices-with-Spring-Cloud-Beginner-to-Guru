@@ -50,7 +50,7 @@ class BeerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(beerDtoStr)
                 .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isOk());
+        ).andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test

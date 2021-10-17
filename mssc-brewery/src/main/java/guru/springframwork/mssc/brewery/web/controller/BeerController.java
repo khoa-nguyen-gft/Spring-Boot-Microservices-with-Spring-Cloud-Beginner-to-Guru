@@ -30,6 +30,7 @@ public class BeerController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Location","/api/v1/beer/"+result.getId());
+        httpHeaders.set("beer-id", result.getId().toString());
         return new ResponseEntity(httpHeaders, HttpStatus.CREATED);
     }
 
