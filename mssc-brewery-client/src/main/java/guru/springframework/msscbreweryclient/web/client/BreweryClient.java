@@ -9,6 +9,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.UUID;
 
 @Component
@@ -41,4 +42,20 @@ public class BreweryClient {
         return beerDto;
     }
 
+    public URI addBeer(BeerDto beerDto) {
+        String url = apiHost + URI_V1;
+        URI uri = restTemplate.postForLocation(url, beerDto);
+
+        return uri;
+    }
+
+    public void updateBeer(UUID id, BeerDto beerDto) {
+        String url = apiHost + URI_V1 + id;
+        restTemplate.put(url, beerDto);
+    }
+
+    public void deleteBeer(UUID beerId){
+        String url = apiHost + URI_V1 + beerId;
+        restTemplate.delete(url);
+    }
 }
