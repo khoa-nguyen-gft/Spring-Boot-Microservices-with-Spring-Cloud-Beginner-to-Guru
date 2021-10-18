@@ -17,6 +17,9 @@ public class BeerDto {
     private UUID id;
     private Integer version;
 
+    private OffsetDateTime createDate;
+    private OffsetDateTime lastModifiedDate;
+
     private String beerName;
     private BeerStyleEnum beerStyle;
 
@@ -24,6 +27,5 @@ public class BeerDto {
     private BigDecimal price;
     private Integer quantityOnHand;
 
-    private OffsetDateTime createDate;
-    private OffsetDateTime lastModifiedDate;
+
 }
