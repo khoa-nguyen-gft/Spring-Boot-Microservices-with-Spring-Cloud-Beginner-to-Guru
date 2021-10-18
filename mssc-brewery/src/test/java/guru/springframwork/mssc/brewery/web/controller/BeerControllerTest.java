@@ -71,7 +71,9 @@ public class BeerControllerTest {
         BeerDto beerDto = validBeer;
         beerDto.setId(null);
 
-        BeerDto saveBeer = BeerDto.builder().id(UUID.randomUUID()).beerName("new beer").build();
+        BeerDto saveBeer = BeerDto.builder()
+                .id(UUID.randomUUID())
+                .beerName("new beer").build();
 
         BDDMockito.given(beerService.saveBeer(ArgumentMatchers.any())).willReturn(saveBeer);
 
@@ -86,9 +88,12 @@ public class BeerControllerTest {
     @Test
     @SneakyThrows
     public void handleUpdate(){
-        String validStr = objectMapper.writeValueAsString(validBeer);
+        BeerDto beerDto = validBeer;
+        beerDto.setId(null);
 
-        mockMvc.perform(MockMvcRequestBuilders.put(URI+validBeer.getId())
+        String validStr = objectMapper.writeValueAsString(beerDto);
+
+        mockMvc.perform(MockMvcRequestBuilders.put(URI+UUID.randomUUID())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(validStr))
                 .andExpect(status().isNoContent());
