@@ -5,11 +5,17 @@ import guru.springframwork.mssc.brewery.web.model.BeerDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-import java.util.UUID;
+import javax.validation.constraints.NotNull;
+import java.util.*;
+import java.util.List;
 
+
+@Validated
 @RequestMapping("/api/v1/beer")
 @RestController
 public class BeerController {
@@ -21,7 +27,7 @@ public class BeerController {
     }
 
     @GetMapping("/{beerId}")
-    public ResponseEntity<BeerDto> getBeer(@PathVariable("beerId")UUID beerId){
+    public ResponseEntity<BeerDto> getBeer(@NotNull @PathVariable("beerId")UUID beerId){
         return new ResponseEntity<BeerDto>(beerService.getBeerById(beerId), HttpStatus.OK);
     }
 
@@ -48,4 +54,6 @@ public class BeerController {
     public void deleteBeer(@PathVariable("beerId") UUID beerId){
         beerService.deleteBeer(beerId);
     }
+
+
 }

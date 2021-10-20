@@ -61,8 +61,7 @@ public class BeerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.is(validBeer.getId().toString())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.beerName", CoreMatchers.is(validBeer.getBeerName().toString())));
-        ;
+                .andExpect(MockMvcResultMatchers.jsonPath("$.beerName", CoreMatchers.is(validBeer.getBeerName())));
     }
 
     @Test
@@ -94,8 +93,8 @@ public class BeerControllerTest {
         String validStr = objectMapper.writeValueAsString(beerDto);
 
         mockMvc.perform(MockMvcRequestBuilders.put(URI+UUID.randomUUID())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(validStr))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(validStr))
                 .andExpect(status().isNoContent());
 
         BDDMockito.then(beerService).should().updateBeer(ArgumentMatchers.any(),ArgumentMatchers.any());
