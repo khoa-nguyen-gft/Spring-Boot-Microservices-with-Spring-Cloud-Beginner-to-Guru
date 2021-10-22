@@ -17,6 +17,8 @@
 		<java.version>11</java.version>
 		<mapstruct.version>1.4.2.Final</mapstruct.version>
 		<projectlombok.version>1.18.20</projectlombok.version>
+		<asciidoctor.version>1.5.6</asciidoctor.version>
+		<restdocs-mockmvc-version>2.0.4.RELEASE</restdocs-mockmvc-version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -111,6 +113,13 @@
 			<optional>true</optional>
 		</dependency>
 
+
+		<dependency>
+			<groupId>org.springframework.restdocs</groupId>
+			<artifactId>spring-restdocs-mockmvc</artifactId>
+			<version>${restdocs-mockmvc-version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -158,6 +167,31 @@
 						</compilerArg>
 					</compilerArgs>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>${asciidoctor.version}</version>
+				<executions>
+					<execution>
+						<id>generate-docs</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<backend>html</backend>
+							<doctype>book</doctype>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.springframework.restdocs</groupId>
+						<artifactId>spring-restdocs-mockmvc</artifactId>
+						<version>${restdocs-mockmvc-version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
