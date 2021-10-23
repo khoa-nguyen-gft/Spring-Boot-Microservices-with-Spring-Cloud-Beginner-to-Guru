@@ -11,13 +11,17 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.restdocs.request.RequestDocumentation;
+import org.springframework.restdocs.snippet.Attributes;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -37,6 +41,8 @@ class BeerControllerTest {
 
     private static final String URI = "/api/v1/beer/";
 
+    private ConstrainedFields fields = new ConstrainedFields(BeerDto.class);
+
     @Test
     @SneakyThrows
     void getBeerById() {
@@ -46,7 +52,7 @@ class BeerControllerTest {
                         .param("isCold", "true")
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcRestDocumentation.document("/v1/beer",
+                .andDo(MockMvcRestDocumentation.document("v1/beer/get",
                         RequestDocumentation.pathParameters(
                                 RequestDocumentation.parameterWithName("beerId").description("UUID of desired beer to get.")
                         ),
@@ -54,15 +60,15 @@ class BeerControllerTest {
                                 RequestDocumentation.parameterWithName("isCold").description("is Beer Cold Query param")
                         ),
                         PayloadDocumentation.responseFields(
-                                fieldWithPath("id").description("Id of Beer"),
-                                fieldWithPath("version").description("Version number"),
-                                fieldWithPath("createDate").description("Date create"),
-                                fieldWithPath("lastModifiedDate").description("Date updated"),
-                                fieldWithPath("beerName").description("Name of Beer"),
-                                fieldWithPath("beerStyle").description("Beer Style"),
-                                fieldWithPath("upc").description("UPC of Beer"),
-                                fieldWithPath("price").description("Price"),
-                                fieldWithPath("quantityOnHand").description("quantity on Hold")
+                                fields.withPath("id").description("Id of Beer"),
+                                fields.withPath("version").description("Version number"),
+                                fields.withPath("createDate").description("Date create"),
+                                fields.withPath("lastModifiedDate").description("Date updated"),
+                                fields.withPath("beerName").description("Name of Beer"),
+                                fields.withPath("beerStyle").description("Beer Style"),
+                                fields.withPath("upc").description("UPC of Beer"),
+                                fields.withPath("price").description("Price"),
+                                fields.withPath("quantityOnHand").description("quantity on Hold")
                         )
 
 
@@ -79,17 +85,17 @@ class BeerControllerTest {
                 .content(beerDtoStr)
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isCreated())
-        .andDo(MockMvcRestDocumentation.document("/v1/beer",
+        .andDo(MockMvcRestDocumentation.document("v1/beer/post",
                 PayloadDocumentation.requestFields(
-                        fieldWithPath("id").ignored(),
-                        fieldWithPath("version").ignored(),
-                        fieldWithPath("createDate").ignored(),
-                        fieldWithPath("lastModifiedDate").ignored(),
-                        fieldWithPath("beerName").description("Name of Beer"),
-                        fieldWithPath("beerStyle").description("Beer Style"),
-                        fieldWithPath("upc").description("UPC of Beer").attributes(),
-                        fieldWithPath("price").description("Price"),
-                        fieldWithPath("quantityOnHand").ignored()
+                        fields.withPath("id").ignored(),
+                        fields.withPath("version").ignored(),
+                        fields.withPath("createDate").ignored(),
+                        fields.withPath("lastModifiedDate").ignored(),
+                        fields.withPath("beerName").description("Name of Beer"),
+                        fields.withPath("beerStyle").description("Beer Style"),
+                        fields.withPath("upc").description("UPC of Beer").attributes(),
+                        fields.withPath("price").description("Price"),
+                        fields.withPath("quantityOnHand").ignored()
                 )
                 )
         )
@@ -116,5 +122,25 @@ class BeerControllerTest {
                 .price(new BigDecimal("12.96"))
                 .quantityOnHand(20)
                 .build();
+    }
+
+    private static class ConstrainedFields {
+        private final ConstraintDescriptions constraintDescriptions;
+
+        private ConstrainedFields(Class<?> input) {
+            this.constraintDescriptions = new ConstraintDescriptions(input);
+        }
+
+        private FieldDescriptor withPath(String path){
+            return fieldWithPath(path).attributes(
+                    Attributes.key("constraints").value(
+                            StringUtils.collectionToDelimitedString(
+                                    this.constraintDescriptions.descriptionsForProperty(path),
+                                    ". "
+                            )
+                    )
+            );
+        }
+
     }
 }
