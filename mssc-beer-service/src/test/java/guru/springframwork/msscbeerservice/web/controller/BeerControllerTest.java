@@ -91,13 +91,13 @@ class BeerControllerTest {
     @SneakyThrows
     void saveNewBeer() {
         BDDMockito.given(service.saveBeer(any())).willReturn(getValidBeanDto());
-        BeerDto input = getValidBeanDto();
-        input.setId(null);
-        input.setVersion(null);
-        input.setCreateDate(null);
-        input.setLastModifiedDate(null);
+        BeerDto params = getValidBeanDto();
+        params.setId(null);
+        params.setVersion(null);
+        params.setCreateDate(null);
+        params.setLastModifiedDate(null);
 
-        String beerDtoStr = mapper.writeValueAsString(input);
+        String beerDtoStr = mapper.writeValueAsString(params);
 
         mockMvc.perform(RestDocumentationRequestBuilders.post(URI)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -126,7 +126,13 @@ class BeerControllerTest {
     void updateBeerById() {
         BDDMockito.given(service.updateBeerById(any(), any())).willReturn(getValidBeanDto());
 
-        String content = mapper.writeValueAsString(getValidBeanDto());
+        BeerDto params = getValidBeanDto();
+        params.setId(null);
+        params.setVersion(null);
+        params.setCreateDate(null);
+        params.setLastModifiedDate(null);
+
+        String content = mapper.writeValueAsString(params);
         mockMvc.perform(MockMvcRequestBuilders.put(URI + UUID.randomUUID().toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content)
