@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+//@AllArgsConstructor
 @RequiredArgsConstructor
 public class BeerServiceImpl implements BeerService {
 

@@ -35,15 +35,15 @@ public class BeerLoader implements CommandLineRunner {
                 .price(new BigDecimal("12.96"))
                 .build());
 
-//            beerRepository.save(Beer.builder()
-//                    .id(UUID.randomUUID())
-//                    .beerName("Galaxy Cat")
-//                    .beerStyle(BeerStyleEnum.PALE_ALE)
-//                    .quantityToBrew(200)
-//                    .minOnHand(12)
-//                    .upc(3370100000000001L)
-//                    .price(new BigDecimal("11.96"))
-//                    .build());
+            beerRepository.save(Beer.builder()
+                    .id(UUID.randomUUID())
+                    .beerName("Galaxy Cat")
+                    .beerStyle(BeerStyleEnum.PALE_ALE)
+                    .quantityToBrew(200)
+                    .minOnHand(12)
+                    .upc(337010024400001L)
+                    .price(new BigDecimal("11.96"))
+                    .build());
         }
 
         System.out.println(">>>>>>>>>>BeerLoader: " + beerRepository.count());

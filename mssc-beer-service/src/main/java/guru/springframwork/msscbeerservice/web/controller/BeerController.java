@@ -3,6 +3,7 @@ package guru.springframwork.msscbeerservice.web.controller;
 import guru.springframwork.msscbeerservice.web.model.BeerDto;
 import guru.springframwork.msscbeerservice.web.services.BeerService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,7 +16,8 @@ import java.util.UUID;
 @RequestMapping("/api/v1/beer")
 @RestController
 @Validated
-@AllArgsConstructor
+//@AllArgsConstructor
+@RequiredArgsConstructor
 public class BeerController {
 
     private final BeerService beerService;
