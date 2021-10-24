@@ -30,6 +30,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -56,65 +57,67 @@ class BeerControllerTest {
     @Test
     @SneakyThrows
     void getBeerById() {
-
-        BDDMockito.given(service.getBeerById(UUID.randomUUID())).willReturn(getValidBeanDto());
-
+        BDDMockito.given(service.getBeerById(any())).willReturn(getValidBeanDto());
         mockMvc.perform(
                 RestDocumentationRequestBuilders.get(URI +"{beerId}", UUID.randomUUID().toString())
                         .accept(MediaType.APPLICATION_JSON)
                         .param("isCold", "true")
                 )
-                .andExpect(MockMvcResultMatchers.status().isOk());
-//                .andDo(MockMvcRestDocumentation.document("v1/beer/get",
-//                        RequestDocumentation.pathParameters(
-//                                RequestDocumentation.parameterWithName("beerId").description("UUID of desired beer to get.")
-//                        ),
-//                        RequestDocumentation.requestParameters(
-//                                RequestDocumentation.parameterWithName("isCold").description("is Beer Cold Query param")
-//                        ),
-//                        PayloadDocumentation.responseFields(
-//                                fields.withPath("id").description("Id of Beer"),
-//                                fields.withPath("version").description("Version number"),
-//                                fields.withPath("createDate").description("Date create"),
-//                                fields.withPath("lastModifiedDate").description("Date updated"),
-//                                fields.withPath("beerName").description("Name of Beer"),
-//                                fields.withPath("beerStyle").description("Beer Style"),
-//                                fields.withPath("upc").description("UPC of Beer"),
-//                                fields.withPath("price").description("Price"),
-//                                fields.withPath("quantityOnHand").description("quantity on Hold")
-//                        )
-//
-//
-//                    )
-//                );
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcRestDocumentation.document("v1/beer/get",
+                        RequestDocumentation.pathParameters(
+                                RequestDocumentation.parameterWithName("beerId").description("UUID of desired beer to get.")
+                        ),
+                        RequestDocumentation.requestParameters(
+                                RequestDocumentation.parameterWithName("isCold").description("is Beer Cold Query param")
+                        ),
+                        PayloadDocumentation.responseFields(
+                                fields.withPath("id").description("Id of Beer"),
+                                fields.withPath("version").description("Version number"),
+                                fields.withPath("createDate").description("Date create"),
+                                fields.withPath("lastModifiedDate").description("Date updated"),
+                                fields.withPath("beerName").description("Name of Beer"),
+                                fields.withPath("beerStyle").description("Beer Style"),
+                                fields.withPath("upc").description("UPC of Beer"),
+                                fields.withPath("price").description("Price"),
+                                fields.withPath("quantityOnHand").description("quantity on Hold")
+                        )
+                    )
+                )
+     ;
     }
 
     @Test
     @SneakyThrows
     void saveNewBeer() {
         BDDMockito.given(service.saveBeer(any())).willReturn(getValidBeanDto());
+        BeerDto input = getValidBeanDto();
+        input.setId(null);
+        input.setVersion(null);
+        input.setCreateDate(null);
+        input.setLastModifiedDate(null);
 
-        String beerDtoStr = mapper.writeValueAsString(getValidBeanDto());
+        String beerDtoStr = mapper.writeValueAsString(input);
 
         mockMvc.perform(RestDocumentationRequestBuilders.post(URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(beerDtoStr)
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isCreated())
-//        .andDo(MockMvcRestDocumentation.document("v1/beer/post",
-//                PayloadDocumentation.requestFields(
-//                        fields.withPath("id").ignored(),
-//                        fields.withPath("version").ignored(),
-//                        fields.withPath("createDate").ignored(),
-//                        fields.withPath("lastModifiedDate").ignored(),
-//                        fields.withPath("beerName").description("Name of Beer"),
-//                        fields.withPath("beerStyle").description("Beer Style"),
-//                        fields.withPath("upc").description("UPC of Beer").attributes(),
-//                        fields.withPath("price").description("Price"),
-//                        fields.withPath("quantityOnHand").ignored()
-//                )
-//                )
-//        )
+        .andDo(MockMvcRestDocumentation.document("v1/beer/post",
+                PayloadDocumentation.requestFields(
+                        fields.withPath("id").ignored(),
+                        fields.withPath("version").ignored(),
+                        fields.withPath("createDate").ignored(),
+                        fields.withPath("lastModifiedDate").ignored(),
+                        fields.withPath("beerName").description("Name of Beer"),
+                        fields.withPath("beerStyle").description("Beer Style"),
+                        fields.withPath("upc").description("UPC of Beer").attributes(),
+                        fields.withPath("price").description("Price"),
+                        fields.withPath("quantityOnHand").ignored()
+                )
+                )
+        )
         ;
     }
 
@@ -134,6 +137,10 @@ class BeerControllerTest {
 
     public BeerDto getValidBeanDto(){
         return BeerDto.builder()
+                .id(UUID.randomUUID())
+                .version(1)
+                .lastModifiedDate(OffsetDateTime.now())
+                .createDate(OffsetDateTime.now())
                 .beerName("Mango Bobs")
                 .beerStyle(BeerStyleEnum.IPA)
                 .upc(3370100000000001L)
