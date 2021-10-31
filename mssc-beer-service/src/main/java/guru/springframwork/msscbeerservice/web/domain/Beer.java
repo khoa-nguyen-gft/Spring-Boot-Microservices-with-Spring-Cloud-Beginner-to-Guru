@@ -29,13 +29,14 @@ public class Beer {
 
     @CreationTimestamp
     @Column(updatable = false)
-    private OffsetDateTime createDate;
+    private OffsetDateTime createdDate;
 
     @LastModifiedDate
     @Column(updatable = false)
     private OffsetDateTime lastModifiedDate;
 
     private String beerName;
+    @Enumerated(EnumType.STRING)
     private BeerStyleEnum beerStyle;
 
     @Column(unique = true)
