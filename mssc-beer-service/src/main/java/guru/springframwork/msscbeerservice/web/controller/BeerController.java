@@ -1,9 +1,12 @@
 package guru.springframwork.msscbeerservice.web.controller;
 
 import guru.springframwork.msscbeerservice.web.model.BeerDto;
+import guru.springframwork.msscbeerservice.web.model.BeerPagedList;
+import guru.springframwork.msscbeerservice.web.model.BeerStyleEnum;
 import guru.springframwork.msscbeerservice.web.services.BeerService;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,7 +23,32 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BeerController {
 
+    private static final Integer DEFAULT_PAGE_NUMBER = 0;
+    private static final Integer DEFAULT_PAGE_SIZE = 25;
+
     private final BeerService beerService;
+
+    @GetMapping("/")
+    public ResponseEntity<BeerPagedList> listBeers(@RequestParam(value="pageNumber") Integer pageNumber,
+                                                   @RequestParam(value="pageSize")   Integer pageSize,
+                                                   @RequestParam(value ="beerName")  String beerName,
+                                                   @RequestParam(value="beerStyle")  BeerStyleEnum beerStyle
+                                                   ){
+        if(pageNumber == null || pageNumber < 0){
+            pageNumber = DEFAULT_PAGE_NUMBER;
+        }
+
+        if(pageSize == null || pageSize < 0){
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+
+        BeerPagedList beerList = beerService.listBeers(beerName, beerStyle, PageRequest.of(pageNumber, pageSize));
+
+
+
+        return new ResponseEntity<>(beerList, HttpStatus.OK);
+    }
+
 
     @GetMapping("/{beerId}")
     public ResponseEntity<BeerDto> getBeerById(@NotNull @PathVariable("beerId") UUID beerId) {
