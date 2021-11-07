@@ -28,7 +28,7 @@ public class BeerController {
 
     private final BeerService beerService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<BeerPagedList> listBeers(@RequestParam(value="pageNumber") Integer pageNumber,
                                                    @RequestParam(value="pageSize")   Integer pageSize,
                                                    @RequestParam(value ="beerName")  String beerName,

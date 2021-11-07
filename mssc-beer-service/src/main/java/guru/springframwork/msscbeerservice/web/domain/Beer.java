@@ -4,6 +4,7 @@ import guru.springframwork.msscbeerservice.web.model.BeerStyleEnum;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Beer {
     @Id
     @GenericGenerator(name = "UUID",  strategy = "org.hibernate.id.UUIDGenerator")
     @GeneratedValue(generator="UUID")
+    @Type(type="uuid-char")
     @Column(length = 36, columnDefinition = "varchar", nullable = false, updatable = false)
     private UUID id;
 

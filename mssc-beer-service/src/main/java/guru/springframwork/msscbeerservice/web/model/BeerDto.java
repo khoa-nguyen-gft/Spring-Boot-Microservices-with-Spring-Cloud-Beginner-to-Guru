@@ -26,7 +26,7 @@ public class BeerDto {
     private Integer version;
     @Null
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ", shape = JsonFormat.Shape.STRING)
-    private OffsetDateTime createDate;
+    private OffsetDateTime createdDate;
     @Null
     private OffsetDateTime lastModifiedDate;
 

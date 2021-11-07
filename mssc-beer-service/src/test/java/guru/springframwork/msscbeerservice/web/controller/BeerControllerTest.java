@@ -94,7 +94,7 @@ class BeerControllerTest {
         BeerDto params = getValidBeanDto();
         params.setId(null);
         params.setVersion(null);
-        params.setCreateDate(null);
+        params.setCreatedDate(null);
         params.setLastModifiedDate(null);
 
         String beerDtoStr = mapper.writeValueAsString(params);
@@ -129,7 +129,7 @@ class BeerControllerTest {
         BeerDto params = getValidBeanDto();
         params.setId(null);
         params.setVersion(null);
-        params.setCreateDate(null);
+        params.setCreatedDate(null);
         params.setLastModifiedDate(null);
 
         String content = mapper.writeValueAsString(params);
@@ -146,7 +146,7 @@ class BeerControllerTest {
                 .id(UUID.randomUUID())
                 .version(1)
                 .lastModifiedDate(OffsetDateTime.now())
-                .createDate(OffsetDateTime.now())
+                .createdDate(OffsetDateTime.now())
                 .beerName("Mango Bobs")
                 .beerStyle(BeerStyleEnum.IPA)
                 .upc(3370100000000001L)

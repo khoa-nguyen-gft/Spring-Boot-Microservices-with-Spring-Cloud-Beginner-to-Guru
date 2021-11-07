@@ -12,7 +12,7 @@ public class BaseTest {
         return BeerDto.builder()
                 .beerName("Beer Name")
                 .beerStyle(BeerStyleEnum.IPA)
-                .createDate(OffsetDateTime.now())
+                .createdDate(OffsetDateTime.now())
                 .lastModifiedDate(OffsetDateTime.now())
                 .price(new BigDecimal("12.34"))
                 .upc(473_298_473_289L)
